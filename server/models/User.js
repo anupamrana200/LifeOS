@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 
 const { Schema, model } = mongoose;
@@ -51,11 +52,30 @@ const userSchema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: {
+      transform: (_document, returnedObject) => {
+        delete returnedObject.password;
+        delete returnedObject.__v;
+        return returnedObject;
+      },
+    },
   },
 );
 
 userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ accountStatus: 1, role: 1 });
+
+userSchema.pre('save', async function hashPassword() {
+  if (!this.isModified('password')) {
+    return;
+  }
+
+  this.password = await bcrypt.hash(this.password, 12);
+});
+
+userSchema.methods.comparePassword = async function comparePassword(password) {
+  return bcrypt.compare(password, this.password);
+};
 
 const User = model('User', userSchema);
 
