@@ -87,3 +87,6 @@ export const updateSessionRefreshToken = async ({
     },
   );
 };
+
+export const deleteSession = async (sessionId) =>
+  Session.findByIdAndDelete(sessionId);
