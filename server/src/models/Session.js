@@ -52,7 +52,6 @@ const sessionSchema = new Schema(
     expiresAt: {
       type: Date,
       required: [true, 'Session expiration is required.'],
-      index: true,
     },
     isRevoked: {
       type: Boolean,
@@ -65,7 +64,10 @@ const sessionSchema = new Schema(
   },
 );
 
+// Active sessions for a user.
 sessionSchema.index({ user: 1, isRevoked: 1 });
+
+// Automatically remove expired sessions.
 sessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const Session = model('Session', sessionSchema);

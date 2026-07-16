@@ -62,7 +62,7 @@ const userSchema = new Schema(
   },
 );
 
-userSchema.index({ email: 1 }, { unique: true });
+// Composite index for admin queries.
 userSchema.index({ accountStatus: 1, role: 1 });
 
 userSchema.pre('save', async function hashPassword() {

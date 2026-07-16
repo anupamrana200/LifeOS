@@ -23,6 +23,10 @@ const errorMiddleware = (error, _req, res, next) => {
     message = 'A record with this value already exists.';
   }
 
+  if (env.nodeEnv !== 'production') {
+    console.error(error);
+  }
+
   const response = {
     success: false,
     message:
@@ -31,8 +35,8 @@ const errorMiddleware = (error, _req, res, next) => {
         : message,
   };
 
-  if (env.nodeEnv !== 'production') {
-    response.stack = error.stack;
+  if (error.details) {
+    response.details = error.details;
   }
 
   return res.status(statusCode).json(response);
