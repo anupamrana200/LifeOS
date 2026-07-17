@@ -12,6 +12,8 @@ import notFoundMiddleware from './middlewares/notFound.middleware.js';
 
 import documentRoutes from './routes/document.routes.js';
 
+import aiRoutes from './routes/ai.route.js';
+
 const app = express();
 
 const allowedOrigins = env.corsOrigin
@@ -51,6 +53,8 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/documents', documentRoutes);
 
+
+app.use('/api/v1/ai', aiRoutes);
 
 /*
 |--------------------------------------------------------------------------

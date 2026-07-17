@@ -21,12 +21,13 @@ const getOwnedDocument = async (documentId, ownerId) => {
   return document;
 };
 
-const getDocumentContent = async (documentId, ownerId) => {
+export const getDocumentContent = async (documentId, ownerId) => {
   const document = await getOwnedDocument(documentId, ownerId);
 
   const buffer = await readEncryptedDocument(document.storagePath);
 
   return {
+    document,
     buffer,
     mimeType: document.mimeType,
     originalFileName: document.originalFileName,

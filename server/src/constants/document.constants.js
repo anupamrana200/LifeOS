@@ -8,10 +8,11 @@ export const DOCUMENT_CATEGORIES = [
   'education',
   'medical',
   'property',
-  'bank',
+  'bank passbook',
+  'bank statement',
   'tax',
   'employment',
-  'other',
+  'others',
 ];
 
 export const AI_STATUS = [
