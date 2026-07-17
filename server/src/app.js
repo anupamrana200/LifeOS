@@ -10,6 +10,8 @@ import authRoutes from './routes/auth.routes.js';
 import errorMiddleware from './middlewares/error.middleware.js';
 import notFoundMiddleware from './middlewares/notFound.middleware.js';
 
+import documentRoutes from './routes/document.routes.js';
+
 const app = express();
 
 const allowedOrigins = env.corsOrigin
@@ -46,6 +48,10 @@ app.use(cookieParser());
 
 app.use('/api/v1/auth', authRoutes);
 
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/documents', documentRoutes);
+
+
 /*
 |--------------------------------------------------------------------------
 | Error Handling
@@ -54,5 +60,6 @@ app.use('/api/v1/auth', authRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
+
 
 export default app;

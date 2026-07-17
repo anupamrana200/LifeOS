@@ -1,0 +1,17 @@
+export const toDocumentResponse = (document) => ({
+  id: (document._id ?? document.id).toString(),
+  title: document.title,
+  category: document.category,
+  description: document.description,
+  originalFileName: document.originalFileName,
+  mimeType: document.mimeType,
+  fileSize: document.fileSize,
+  expiryDate: document.expiryDate,
+  tags: document.tags,
+  aiStatus: document.aiStatus,
+  aiSummary: document.aiSummary,
+  aiMetadata: document.aiMetadata,
+  isArchived: document.isArchived,
+  createdAt: document.createdAt,
+  updatedAt: document.updatedAt,
+});

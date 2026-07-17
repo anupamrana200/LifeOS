@@ -24,6 +24,8 @@ const env = Object.freeze({
   jwtAudience: 'LifeOS-Client',
 
   cookieSameSite: process.env.COOKIE_SAME_SITE ?? 'lax',
+
+  fileEncryptionKey: process.env.FILE_ENCRYPTION_KEY ?? '',
 });
 
 export default env;
