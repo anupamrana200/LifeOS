@@ -1,4 +1,5 @@
 import { extractDocument } from './document-extraction.service.js';
+import embeddingService from './embeddings/embedding.service.js';
 
 import {
   markAIProcessing,
@@ -55,6 +56,18 @@ export const processDocument = async ({
           aiResult.extractionMetadata,
       },
     });
+
+    try {
+      console.log('Extracted text length:', aiResult.extractedText?.length);
+      await embeddingService.indexDocument({
+        documentId: documentId.toString(),
+        userId: document.document.owner.toString(),
+        text: aiResult.extractedText,
+      });
+    } catch (error) {
+      console.error('Embedding indexing failed:', error);
+    }
+
 
     return aiResult;
   } catch (error) {

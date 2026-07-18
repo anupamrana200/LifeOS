@@ -110,12 +110,12 @@ export const extractDocument = async ({
 
     usage: aiResponse.usage,
 
-    finishReason:
-      aiResponse.finishReason,
+    finishReason: aiResponse.finishReason,
 
     generatedAt: new Date(),
 
-    extractionMetadata:
-      extractionResult.metadata,
+    extractionMetadata: extractionResult.metadata,
+
+    extractedText: extractionResult.text,
   };
 };

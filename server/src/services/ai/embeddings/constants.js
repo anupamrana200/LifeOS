@@ -1,0 +1,17 @@
+export const EMBEDDING_PROVIDERS = {
+  OPENAI: 'openai',
+};
+
+export const EMBEDDING_MODELS = {
+  OPENAI_SMALL: 'text-embedding-3-small',
+};
+
+export const DEFAULT_EMBEDDING_PROVIDER =
+  EMBEDDING_PROVIDERS.OPENAI;
+
+export const DEFAULT_EMBEDDING_MODEL =
+  EMBEDDING_MODELS.OPENAI_SMALL;
+
+export const EMBEDDING_DIMENSIONS = {
+  [EMBEDDING_MODELS.OPENAI_SMALL]: 1536,
+};
