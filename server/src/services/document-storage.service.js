@@ -1,13 +1,15 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import env from '../config/env.js';
+
 
 import {
   encryptBuffer,
   decryptBuffer,
 } from './encryption.service.js';
 
-const STORAGE_DIRECTORY = path.resolve('src/uploads/encrypted');
+const STORAGE_DIRECTORY = path.resolve(env.documentStorageDir);
 
 await fs.mkdir(STORAGE_DIRECTORY, { recursive: true });
 

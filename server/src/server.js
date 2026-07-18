@@ -1,8 +1,10 @@
 import app from './app.js';
 import connectDB, { disconnectDB } from './config/db.js';
 import env from './config/env.js';
+import validateEnv from './config/validateEnv.js';
 
 const startServer = async () => {
+  validateEnv();
   await connectDB();
 
   const server = app.listen(env.port, () => {
