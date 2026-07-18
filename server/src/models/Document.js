@@ -87,8 +87,8 @@ const documentSchema = new Schema(
       default: 'pending',
     },
 
-    aiSummary: {
-      type: String,
+    aiResult: {
+      type: Schema.Types.Mixed,
       default: null,
     },
 

@@ -1,21 +1,44 @@
 import { GoogleGenAI } from '@google/genai';
 
-const gemini = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
+import ProviderInterface from './provider.interface.js';
 
-export const generateGeminiContent = async ({
-  prompt,
-  model = process.env.GEMINI_MODEL || 'gemini-2.5-flash',
-}) => {
-  const response = await gemini.models.generateContent({
-    model,
-    contents: prompt,
-  });
+import {
+  DEFAULT_GEMINI_MODEL,
+  PROVIDERS,
+} from './constants.js';
 
-  return {
-  text: response.text,
-  usage: response.usageMetadata ?? null,
-  finishReason: response.candidates?.[0]?.finishReason ?? null,
-};
-};
+class GeminiProvider extends ProviderInterface {
+  constructor() {
+    super();
+
+    this.client = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    });
+
+    this.model = DEFAULT_GEMINI_MODEL;
+  }
+
+  async generate({
+    system,
+    user,
+    model = this.model,
+  }) {
+    const response =
+      await this.client.models.generateContent({
+        model,
+        contents: `${system}\n\n${user}`,
+      });
+
+    return {
+      provider: PROVIDERS.GEMINI,
+      model,
+      text: response.text,
+      usage: response.usageMetadata ?? null,
+      finishReason:
+        response.candidates?.[0]?.finishReason ??
+        null,
+    };
+  }
+}
+
+export default new GeminiProvider();

@@ -1,11 +1,33 @@
 import { body } from 'express-validator';
 
-export const generateSummaryValidator = [
+export const processDocumentValidator = [
+  body('task')
+    .optional()
+    .isIn([
+      'summary',
+      'extract',
+    ])
+    .withMessage('Unsupported AI task.'),
+
+  body('documentType')
+    .optional()
+    .isIn([
+      'generic',
+      'invoice',
+      'receipt',
+      'identity',
+      'bank',
+    ])
+    .withMessage('Unsupported document type.'),
+
   body('modelProvider')
     .trim()
     .notEmpty()
     .withMessage('Model provider is required.')
-    .isIn(['gemini', 'openai'])
+    .isIn([
+      'gemini',
+      'openai',
+    ])
     .withMessage('Unsupported model provider.'),
 
   body('model')

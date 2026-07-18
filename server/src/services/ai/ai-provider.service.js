@@ -1,28 +1,19 @@
-import { generateGeminiContent } from './providers/gemini.provider.js';
-import { generateOpenAIContent } from './providers/openai.provider.js';
-import ValidationError from '../../errors/ValidationError.js';
+import {
+  getProvider,
+} from './providers/provider.factory.js';
 
 export const generateContent = async ({
   modelProvider,
   model,
   prompt,
 }) => {
-  switch (modelProvider?.toLowerCase()) {
-    case 'gemini':
-      return generateGeminiContent({
-        prompt,
-        model,
-      });
+  const provider = getProvider(modelProvider);
 
-    case 'openai':
-      return generateOpenAIContent({
-        prompt,
-        model,
-      });
+  return provider.generate({
+    model,
 
-    default:
-      throw new ValidationError(
-        `Unsupported AI provider: ${modelProvider}`,
-      );
-  }
+    system: prompt.system,
+
+    user: prompt.user,
+  });
 };

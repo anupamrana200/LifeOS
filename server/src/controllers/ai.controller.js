@@ -5,14 +5,16 @@ import {
 } from '../services/document.service.js';
 
 import {
-  generateDocumentSummary,
-} from '../services/ai/ai-manager.service.js';
+  processDocument,
+} from '../services/ai/ai.service.js';
 
-export const generateSummary = asyncHandler(
+export const processDocumentController = asyncHandler(
   async (req, res) => {
     const { documentId } = req.params;
 
     const {
+      task = 'summary',
+      documentType = 'generic',
       modelProvider,
       model,
       password,
@@ -28,22 +30,23 @@ export const generateSummary = asyncHandler(
       req.user.id,
     );
 
-    const result =
-      await generateDocumentSummary({
-        document: {
-          buffer,
-          mimeType,
-          originalFileName,
-          document,
-        },
-        modelProvider,
-        model,
-        password,
-      });
+    const result = await processDocument({
+      document: {
+        buffer,
+        mimeType,
+        originalFileName,
+        document,
+      },
+      task,
+      documentType,
+      modelProvider,
+      model,
+      password,
+    });
 
     res.status(200).json({
       success: true,
-      message: 'Document summary generated successfully.',
+      message: 'AI processing completed successfully.',
       data: result,
     });
   },
