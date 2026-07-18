@@ -63,6 +63,16 @@ app.use('/api/v1/ai', aiRoutes);
 |--------------------------------------------------------------------------
 */
 
+app.get('/health', (_req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'LifeOS API is healthy.',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV,
+  });
+});
+
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
 

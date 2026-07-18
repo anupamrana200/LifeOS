@@ -175,7 +175,7 @@ export const getMessagesController =
             if (clientDisconnected) {
               return;
             }
-            console.log("TOKEN:", token);
+      
             res.write(
               `data: ${JSON.stringify({
                 token,
