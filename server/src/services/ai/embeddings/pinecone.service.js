@@ -32,20 +32,29 @@ class PineconeService {
     );
   }
 
-  async query(vector, topK = 5, filter = {}) {
-    if (!Array.isArray(vector) || vector.length === 0) {
-      throw new Error('Query vector is empty.');
-    }
-
-    return retry(() =>
-      index.query({
+    async query(
         vector,
-        topK,
-        filter,
-        includeMetadata: true,
-      })
-    );
-  }
+        topK = 5,
+        filter = {}
+    ) {
+
+        return retry(() =>
+
+          index.query({
+
+            vector,
+
+            topK,
+
+            filter,
+
+            includeMetadata: true,
+
+          })
+
+        );
+
+    }
 
   async delete(ids) {
     if (!ids?.length) return;

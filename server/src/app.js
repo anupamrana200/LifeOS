@@ -9,6 +9,7 @@ import env from './config/env.js';
 import authRoutes from './routes/auth.routes.js';
 import errorMiddleware from './middlewares/error.middleware.js';
 import notFoundMiddleware from './middlewares/notFound.middleware.js';
+import chatRoutes from './routes/chat.routes.js';
 
 import documentRoutes from './routes/document.routes.js';
 
@@ -50,9 +51,9 @@ app.use(cookieParser());
 
 app.use('/api/v1/auth', authRoutes);
 
-app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/documents', documentRoutes);
 
+app.use('/api/v1/chats', chatRoutes);
 
 app.use('/api/v1/ai', aiRoutes);
 

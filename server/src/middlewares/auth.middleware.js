@@ -5,7 +5,15 @@ import { verifyAccessToken } from '../services/jwt.service.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
 export const protect = asyncHandler(async (req, _res, next) => {
-  const accessToken = req.cookies?.accessToken;
+  const bearerToken =
+  req.headers.authorization?.startsWith('Bearer ')
+    ? req.headers.authorization.split(' ')[1]
+    : null;
+
+  const accessToken =
+    req.cookies?.accessToken || bearerToken;
+
+  // const accessToken = req.cookies?.accessToken;
 
   if (!accessToken) {
     throw new AuthenticationError('Authentication token is required.');
