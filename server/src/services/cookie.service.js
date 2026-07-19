@@ -3,13 +3,21 @@ import env from '../config/env.js';
 const ACCESS_TOKEN_COOKIE_MAX_AGE = 15 * 60 * 1000;
 const REFRESH_TOKEN_COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
-const getAuthCookieOptions = (maxAge) => ({
-  httpOnly: true,
-  secure: false,
-  sameSite: env.cookieSameSite,
-  path: '/',
-  maxAge,
-});
+const getAuthCookieOptions = (maxAge) => {
+  console.log("Cookie Config:", {
+    nodeEnv: env.nodeEnv,
+    sameSite: env.cookieSameSite,
+    secure: false,
+  });
+
+  return {
+    httpOnly: true,
+    secure: false,
+    sameSite: env.cookieSameSite,
+    path: "/",
+    maxAge,
+  };
+};
 
 export const setAccessTokenCookie = (res, accessToken) =>
   res.cookie(
