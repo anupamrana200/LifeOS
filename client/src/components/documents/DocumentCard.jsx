@@ -1,0 +1,6 @@
+import { FileText } from 'lucide-react';
+import { formatDocumentDate, formatFileSize } from '@/utils';
+import { DocumentActionsMenu } from './DocumentActionsMenu';
+import { DocumentStatusBadge } from './DocumentStatusBadge';
+
+export const DocumentCard = ({ document, ...actions }) => <article className="rounded-panel border border-border bg-card p-gutter shadow-card transition-[transform,box-shadow] duration-theme hover:-translate-y-0.5 hover:shadow-floating"><div className="flex items-start justify-between gap-3"><span className="flex size-10 items-center justify-center rounded-card bg-accent/10 text-accent"><FileText aria-hidden="true" size={20} /></span><DocumentActionsMenu document={document} {...actions} /></div><h2 className="mt-gutter truncate font-display text-sm font-semibold text-content-primary">{document.title}</h2><p className="mt-1 truncate text-xs text-content-muted">{document.originalFileName}</p><div className="mt-gutter flex items-center justify-between gap-2"><DocumentStatusBadge document={document} /><span className="text-xs text-content-muted">{formatFileSize(document.fileSize)}</span></div><div className="mt-3 flex justify-between text-xs text-content-muted"><span>{document.mimeType?.split('/').pop()?.toUpperCase()}</span><span>{formatDocumentDate(document.createdAt)}</span></div></article>;

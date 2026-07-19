@@ -1,0 +1,12 @@
+import { useEffect, useState } from 'react';
+import { X } from 'lucide-react';
+import { formatDocumentDate, formatFileSize } from '@/utils';
+import { DocumentStatusBadge } from './DocumentStatusBadge';
+
+export const DocumentDetailsDrawer = ({ document, isOpen, onClose, onRename, renameMode }) => {
+  const [title, setTitle] = useState(document?.title || '');
+  useEffect(() => setTitle(document?.title || ''), [document]);
+  if (!isOpen || !document) return null;
+  const details = [['Type', document.mimeType], ['Size', formatFileSize(document.fileSize)], ['Pages', document.aiMetadata?.pages || '—'], ['Chunks', document.aiMetadata?.chunks || '—'], ['Embedding', document.aiStatus === 'completed' ? 'Indexed' : document.aiStatus], ['Uploaded', formatDocumentDate(document.createdAt)], ['Last modified', formatDocumentDate(document.updatedAt)]];
+  return <div aria-modal="true" className="fixed inset-0 z-modal flex justify-end bg-secondary/40" role="dialog" aria-label="Document details"><aside className="h-full w-full max-w-md overflow-y-auto border-l border-border bg-card p-gutter shadow-floating"><div className="flex items-center justify-between"><h2 className="font-display text-lg font-semibold text-content-primary">Document details</h2><button aria-label="Close document details" className="inline-flex size-9 items-center justify-center rounded-control text-content-secondary hover:bg-canvas" onClick={onClose} type="button"><X aria-hidden="true" size={18} /></button></div><div className="mt-layout"><p className="text-xs font-medium uppercase tracking-wide text-content-muted">Name</p>{renameMode ? <div className="mt-2 flex gap-2"><input className="min-w-0 flex-1 rounded-control border border-border bg-surface px-3 py-2 text-sm" onChange={(event) => setTitle(event.target.value)} value={title} /><button className="rounded-control bg-primary px-3 text-sm font-medium text-content-inverse" onClick={() => onRename(document.id, title)} type="button">Save</button></div> : <p className="mt-2 break-words font-medium text-content-primary">{document.title}</p>}<p className="mt-1 text-sm text-content-secondary">{document.originalFileName}</p><div className="mt-3"><DocumentStatusBadge document={document} /></div></div><dl className="mt-layout divide-y divide-border">{details.map(([label, value]) => <div className="flex justify-between gap-4 py-3 text-sm" key={label}><dt className="text-content-secondary">{label}</dt><dd className="max-w-[60%] text-right text-content-primary">{value || '—'}</dd></div>)}</dl></aside></div>;
+};

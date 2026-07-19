@@ -1,0 +1,1 @@
+export const SuggestionChip = ({ children, onClick }) => <button className="rounded-pill border border-border bg-card px-3 py-1.5 text-sm text-content-secondary transition-colors duration-theme hover:border-primary hover:text-primary" onClick={onClick} type="button">{children}</button>;

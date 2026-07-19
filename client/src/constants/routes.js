@@ -1,0 +1,17 @@
+export const ROUTES = Object.freeze({
+  home: '/',
+  signIn: '/sign-in',
+  signUp: '/sign-up',
+  forgotPassword: '/forgot-password',
+  resetPassword: '/reset-password/:token',
+  verifyEmail: '/verify-email/:token',
+  verifyEmailPending: '/verify-email/pending',
+  verificationSuccess: '/verify-email/success',
+  invalidToken: '/verify-email/invalid',
+  dashboard: '/dashboard',
+  chat: '/chat',
+  documents: '/documents',
+  search: '/search',
+  settings: '/settings',
+  profile: '/profile',
+});

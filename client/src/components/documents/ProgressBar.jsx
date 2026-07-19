@@ -1,0 +1,1 @@
+export const ProgressBar = ({ value = 0 }) => <div aria-label={`${value}% uploaded`} aria-valuemax="100" aria-valuemin="0" aria-valuenow={value} className="h-1.5 overflow-hidden rounded-pill bg-border" role="progressbar"><div className="h-full rounded-pill bg-primary transition-[width] duration-theme" style={{ width: `${value}%` }} /></div>;

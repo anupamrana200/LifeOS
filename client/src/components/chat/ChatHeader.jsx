@@ -1,0 +1,8 @@
+import { Info, Menu, PanelRightOpen, Wifi } from 'lucide-react';
+
+export const ChatHeader = ({ conversation, onInfoOpen, onSidebarOpen }) => (
+  <header className="flex min-h-16 items-center justify-between gap-3 border-b border-border px-gutter py-3">
+    <div className="flex min-w-0 items-center gap-2"><button aria-label="Open conversations" className="inline-flex size-9 shrink-0 items-center justify-center rounded-control text-content-secondary hover:bg-canvas lg:hidden" onClick={onSidebarOpen} type="button"><Menu aria-hidden="true" size={19} /></button><div className="min-w-0"><h2 className="truncate font-display text-sm font-semibold text-content-primary">{conversation?.title || 'New conversation'}</h2><div className="mt-1 flex items-center gap-2"><span className="rounded-pill bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">{conversation?.provider || 'OpenAI'}</span><span className="inline-flex items-center gap-1 text-xs text-success"><Wifi aria-hidden="true" size={12} />Connected</span></div></div></div>
+    <div className="flex items-center gap-1"><span className="hidden rounded-pill bg-success/15 px-2 py-1 text-xs font-medium text-success sm:inline">Ready</span><button aria-label="Open conversation details" className="inline-flex size-9 items-center justify-center rounded-control text-content-secondary hover:bg-canvas xl:hidden" onClick={onInfoOpen} type="button"><PanelRightOpen aria-hidden="true" size={18} /></button><button aria-label="Conversation options" className="hidden size-9 items-center justify-center rounded-control text-content-secondary hover:bg-canvas sm:inline-flex" type="button"><Info aria-hidden="true" size={18} /></button></div>
+  </header>
+);

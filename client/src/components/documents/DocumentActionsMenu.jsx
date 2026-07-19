@@ -1,0 +1,8 @@
+import { Download, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+
+export const DocumentActionsMenu = ({ document, onDelete, onDownload, onRename, onView }) => {
+  const [isOpen, setOpen] = useState(false);
+  const action = (callback) => { callback(document); setOpen(false); };
+  return <div className="relative"><button aria-expanded={isOpen} aria-label={`Actions for ${document.title}`} className="inline-flex size-9 items-center justify-center rounded-control text-content-muted hover:bg-canvas" onClick={() => setOpen((current) => !current)} type="button"><MoreHorizontal aria-hidden="true" size={18} /></button>{isOpen && <div className="absolute right-0 z-dropdown mt-1 w-40 rounded-card border border-border bg-card p-1 shadow-floating"><button className="flex w-full items-center gap-2 rounded-control px-3 py-2 text-sm text-content-secondary hover:bg-canvas" onClick={() => action(onView)} type="button">View details</button><button className="flex w-full items-center gap-2 rounded-control px-3 py-2 text-sm text-content-secondary hover:bg-canvas" onClick={() => action(onRename)} type="button"><Pencil aria-hidden="true" size={15} />Rename</button><button className="flex w-full items-center gap-2 rounded-control px-3 py-2 text-sm text-content-secondary hover:bg-canvas" onClick={() => action(onDownload)} type="button"><Download aria-hidden="true" size={15} />Download</button><button className="flex w-full items-center gap-2 rounded-control px-3 py-2 text-sm text-danger hover:bg-canvas" onClick={() => action(onDelete)} type="button"><Trash2 aria-hidden="true" size={15} />Delete</button></div>}</div>;
+};

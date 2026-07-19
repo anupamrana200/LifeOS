@@ -1,0 +1,9 @@
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { useAuth, useSettings } from '@/hooks';
+
+export const ProfileForm = () => {
+  const { user } = useAuth(); const { settings, updateSection } = useSettings();
+  const { handleSubmit, register } = useForm({ defaultValues: { fullName: user?.fullName || '', ...settings.profile } });
+  return <form className="space-y-4" onSubmit={handleSubmit((values) => { updateSection('profile', values); toast.success('Profile preferences saved locally.'); })}><label className="block text-sm font-medium text-content-primary">Full name<input className="mt-1.5 w-full rounded-control border border-border bg-surface px-3 py-2" {...register('fullName')} /></label><label className="block text-sm font-medium text-content-primary">Username<input className="mt-1.5 w-full rounded-control border border-border bg-surface px-3 py-2" {...register('username')} /></label><label className="block text-sm font-medium text-content-primary">Bio<textarea className="mt-1.5 min-h-24 w-full rounded-control border border-border bg-surface px-3 py-2" {...register('bio')} /></label><div className="grid gap-3 sm:grid-cols-2"><label className="text-sm font-medium text-content-primary">Company<input className="mt-1.5 w-full rounded-control border border-border bg-surface px-3 py-2" {...register('company')} /></label><label className="text-sm font-medium text-content-primary">Location<input className="mt-1.5 w-full rounded-control border border-border bg-surface px-3 py-2" {...register('location')} /></label></div><label className="block text-sm font-medium text-content-primary">Website<input className="mt-1.5 w-full rounded-control border border-border bg-surface px-3 py-2" {...register('website')} /></label><button className="rounded-control bg-primary px-4 py-2 text-sm font-semibold text-content-inverse" type="submit">Save changes</button></form>;
+};

@@ -1,0 +1,9 @@
+export { EmailVerificationPendingPage } from './EmailVerificationPendingPage';
+export { ForgotPasswordPage } from './ForgotPasswordPage';
+export { InvalidTokenPage } from './InvalidTokenPage';
+export { LoginPage } from './LoginPage';
+export { RegisterPage } from './RegisterPage';
+export { ResetPasswordPage } from './ResetPasswordPage';
+export { VerificationLoadingPage } from './VerificationLoadingPage';
+export { VerificationSuccessPage } from './VerificationSuccessPage';
+export { VerifyEmailPage } from './VerifyEmailPage';

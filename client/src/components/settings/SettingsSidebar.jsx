@@ -1,0 +1,2 @@
+const sections = ['General', 'Appearance', 'AI', 'Chat', 'Notifications', 'Security', 'Account', 'About'];
+export const SettingsSidebar = ({ active, onSelect }) => <nav aria-label="Settings sections" className="flex gap-2 overflow-x-auto border-b border-border pb-3 lg:block lg:border-b-0 lg:pb-0">{sections.map((section) => <button className={`shrink-0 rounded-control px-3 py-2 text-sm ${active === section ? 'bg-primary text-content-inverse' : 'text-content-secondary hover:bg-canvas'}`} key={section} onClick={() => onSelect(section)} type="button">{section}</button>)}</nav>;

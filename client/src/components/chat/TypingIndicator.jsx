@@ -1,0 +1,3 @@
+import { Bot } from 'lucide-react';
+
+export const TypingIndicator = () => <div aria-live="polite" className="flex items-center gap-3"><span className="flex size-8 items-center justify-center rounded-pill bg-primary text-content-inverse"><Bot aria-hidden="true" size={16} /></span><span className="flex items-center gap-1 rounded-panel border border-border bg-card px-3 py-2.5"><span className="size-1.5 animate-bounce rounded-pill bg-content-muted" /><span className="size-1.5 animate-bounce rounded-pill bg-content-muted [animation-delay:120ms]" /><span className="size-1.5 animate-bounce rounded-pill bg-content-muted [animation-delay:240ms]" /><span className="sr-only">Assistant is typing</span></span></div>;
