@@ -60,6 +60,7 @@ const env = Object.freeze({
   cookieSameSite: process.env.COOKIE_SAME_SITE ?? 'lax',
 
   fileEncryptionKey: process.env.FILE_ENCRYPTION_KEY ?? '',
+  dataEncryptionKey: process.env.DATA_ENCRYPTION_KEY?.trim() ?? process.env.FILE_ENCRYPTION_KEY?.trim() ?? '',
 
   documentStorageDir: process.env.DOCUMENT_STORAGE_DIR?.trim() ?? 'src/uploads/encrypted',
 });

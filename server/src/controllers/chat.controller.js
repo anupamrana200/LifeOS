@@ -1,6 +1,7 @@
 import asyncHandler from '../utils/asyncHandler.js';
 
 import { chatService, messageService } from '../services/chat/index.js';
+import { toChatResponse } from '../serializers/chat.serializer.js';
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +44,7 @@ export const createChatController = asyncHandler(
     res.status(201).json({
       success: true,
       message: 'Chat created successfully.',
-      data: chat,
+      data: toChatResponse(chat),
     });
   },
 );
@@ -56,7 +57,7 @@ export const getChatsController = asyncHandler(
 
     res.status(200).json({
       success: true,
-      data: chats,
+      data: chats.map(toChatResponse),
     });
   },
 );
@@ -77,7 +78,7 @@ export const getChatController = asyncHandler(
 
     res.status(200).json({
       success: true,
-      data: chat,
+      data: toChatResponse(chat),
     });
   },
 );

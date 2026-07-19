@@ -13,18 +13,21 @@ import {
   revokeSession,
   revokeAllSessions,
 } from './session.service.js';
+import { blindIndex, encryptText } from './encryption.service.js';
+import { toUserResponse } from '../serializers/user.serializer.js';
 
 const REFRESH_TOKEN_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
 export const register = async ({ fullName, email, password }) => {
-  const existingUser = await User.findOne({ email });
+  const normalizedEmail = email.trim().toLowerCase();
+  const existingUser = await User.findOne({ $or: [{ emailHash: blindIndex(normalizedEmail, 'user.email') }, { email: normalizedEmail }] });
 
   if (existingUser) {
     throw new ConflictError('An account with this email already exists.');
   }
 
   try {
-    return await User.create({ fullName, email, password });
+    return toUserResponse(await User.create({ fullName: encryptText(fullName, 'user.fullName'), email: encryptText(normalizedEmail, 'user.email'), emailHash: blindIndex(normalizedEmail, 'user.email'), password }));
   } catch (error) {
     if (error.code === 11000) {
       throw new ConflictError('An account with this email already exists.');
@@ -35,7 +38,8 @@ export const register = async ({ fullName, email, password }) => {
 };
 
 export const login = async (credentials, requestInfo) => {
-  const user = await User.findOne({ email: credentials.email }).select('+password');
+  const normalizedEmail = credentials.email.trim().toLowerCase();
+  const user = await User.findOne({ $or: [{ emailHash: blindIndex(normalizedEmail, 'user.email') }, { email: normalizedEmail }] }).select('+password');
 
   if (!user) {
     throw new AuthenticationError('Invalid email or password.');
@@ -71,7 +75,7 @@ export const login = async (credentials, requestInfo) => {
   user.password = undefined;
 
   return {
-    user: user.toJSON(),
+    user: toUserResponse(user),
     accessToken,
     refreshToken,
   };
@@ -142,7 +146,7 @@ export const refresh = async (refreshToken, requestInfo) => {
   user.password = undefined;
 
   return {
-    user: user.toJSON(),
+    user: toUserResponse(user),
     accessToken,
     refreshToken: newRefreshToken,
   };
@@ -163,7 +167,8 @@ export const logout = async (refreshToken) => {
 };
 
 export const getCurrentUser = async (userId) => {
-  return User.findById(userId).select('-password');
+  const user = await User.findById(userId).select('-password');
+  return user ? toUserResponse(user) : null;
 };
 
 export const logoutAll = async (userId) => {

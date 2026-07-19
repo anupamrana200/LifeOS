@@ -1,4 +1,5 @@
 import Chat from '../../models/chat.model.js';
+import { encryptText } from '../encryption.service.js';
 
 class ChatService {
   async create({
@@ -10,6 +11,7 @@ class ChatService {
       owner,
       model,
       provider,
+      title: encryptText('New Chat', 'chat.title'),
     });
   }
 

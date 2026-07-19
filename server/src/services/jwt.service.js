@@ -36,10 +36,6 @@ const verifyToken = (token, secret, tokenType) => {
 export const generateAccessToken = (user) => {
   const userId = getUserId(user);
 
-  if (!user?.email) {
-    throw new Error('User email is required to generate an access token.');
-  }
-
   if (!user?.role) {
     throw new Error('User role is required to generate an access token.');
   }
@@ -47,7 +43,6 @@ export const generateAccessToken = (user) => {
   return jwt.sign(
     {
       userId,
-      email: user.email,
       role: user.role,
     },
     env.jwtAccessSecret,

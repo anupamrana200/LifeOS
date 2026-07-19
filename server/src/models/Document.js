@@ -19,7 +19,7 @@ const documentSchema = new Schema(
       required: [true, 'Document title is required.'],
       trim: true,
       minlength: [2, 'Document title must be at least 2 characters long.'],
-      maxlength: [200, 'Document title cannot exceed 200 characters.'],
+      maxlength: [1024, 'Document title cannot exceed 200 characters.'],
     },
 
     category: {
@@ -31,7 +31,7 @@ const documentSchema = new Schema(
     description: {
       type: String,
       trim: true,
-      maxlength: [2000, 'Description cannot exceed 2000 characters.'],
+      maxlength: [4096, 'Description cannot exceed 2000 characters.'],
       default: null,
     },
 

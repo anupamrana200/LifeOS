@@ -1,5 +1,6 @@
 import pineconeService from '../embeddings/pinecone.service.js';
 import queryService from './query.service.js';
+import { decryptText } from '../../encryption.service.js';
 
 class RetrievalService {
   async retrieve({
@@ -27,7 +28,7 @@ class RetrievalService {
 
     return matches.map(match => ({
       score: match.score,
-      content: match.metadata.content,
+      content: decryptText(match.metadata.content, 'vector.chunk'),
       documentId: match.metadata.documentId,
     }));
   }

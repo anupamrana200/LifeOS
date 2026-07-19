@@ -1,4 +1,5 @@
 import Document from '../../models/Document.js';
+import { encryptJson } from '../encryption.service.js';
 
 export const markAIProcessing = async (
   documentId,
@@ -23,8 +24,8 @@ export const saveAIResult = async ({
     documentId,
     {
       aiStatus: 'completed',
-      aiResult: result,
-      aiMetadata: metadata,
+      aiResult: encryptJson(result, 'document.aiResult'),
+      aiMetadata: encryptJson(metadata, 'document.aiMetadata'),
     },
     {
       new: true,
@@ -41,10 +42,10 @@ export const markAIFailed = async ({
     documentId,
     {
       aiStatus: 'failed',
-      aiMetadata: {
+      aiMetadata: encryptJson({
         error: error.message,
         failedAt: new Date(),
-      },
+      }, 'document.aiMetadata'),
     },
     {
       new: true,

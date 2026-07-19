@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 
 import Session from '../models/Session.js';
+import { encryptText } from './encryption.service.js';
 
 const hashRefreshToken = (refreshToken) => {
   if (!refreshToken || typeof refreshToken !== 'string') {
@@ -27,11 +28,11 @@ export const createSession = async ({
   return Session.create({
     user: userId,
     hashedRefreshToken: hashRefreshToken(refreshToken),
-    ipAddress,
-    userAgent,
-    browser,
-    operatingSystem,
-    deviceName,
+    ipAddress: encryptText(ipAddress, 'session.ipAddress'),
+    userAgent: encryptText(userAgent, 'session.userAgent'),
+    browser: encryptText(browser, 'session.browser'),
+    operatingSystem: encryptText(operatingSystem, 'session.operatingSystem'),
+    deviceName: encryptText(deviceName, 'session.deviceName'),
     expiresAt,
   });
 };

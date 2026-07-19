@@ -62,14 +62,14 @@ export const ChatPage = () => {
   };
 
   return (
-    <div className={`chat-page-enter relative grid min-h-0 flex-1 overflow-hidden rounded-panel border border-border bg-card shadow-card ${isFullscreen ? 'h-dvh w-screen rounded-none' : ''} ${isExpanded ? 'grid-cols-1' : 'lg:grid-cols-[17rem_minmax(0,1fr)] xl:grid-cols-[17rem_minmax(0,1fr)_19rem]'}`} ref={chatWorkspaceRef}>
+    <div aria-label="Resizable chat workspace" className={`chat-page-enter relative grid min-h-0 w-full flex-1 grid-rows-[minmax(0,1fr)] resize-x overflow-hidden rounded-panel border border-border bg-card shadow-card ${isFullscreen ? 'h-dvh w-screen resize-none rounded-none' : ''} ${isExpanded ? 'grid-cols-1' : 'lg:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)_17rem]'}`} ref={chatWorkspaceRef}>
       {isConversationSidebarOpen && <button aria-label="Close conversations" className="fixed inset-0 z-overlay bg-secondary/40 lg:hidden" onClick={() => setConversationSidebarOpen(false)} type="button" />}
       {isInfoPanelOpen && <button aria-label="Close conversation details" className="fixed inset-0 z-overlay bg-secondary/40 xl:hidden" onClick={() => setInfoPanelOpen(false)} type="button" />}
       {!isExpanded && <ChatSidebar conversations={conversations} isLoading={isConversationsLoading} isOpen={isConversationSidebarOpen} onClose={() => setConversationSidebarOpen(false)} onDelete={(conversation) => setPendingDeletion(conversation)} onNewChat={createNewConversation} onSelect={selectConversation} selectedConversationId={currentConversation?.id} />}
       <section aria-label="Chat" className="relative z-base flex min-h-0 min-w-0 flex-col overflow-hidden bg-surface">
         <ChatHeader conversation={currentConversation} isExpanded={isExpanded} isFullscreen={isFullscreen} isStreaming={isTyping} onInfoOpen={() => setInfoPanelOpen(true)} onSidebarOpen={() => setConversationSidebarOpen(true)} onToggleExpanded={() => setExpanded((current) => !current)} onToggleFullscreen={toggleFullscreen} selectedModel={settings.ai.model} selectedProvider={settings.ai.provider === 'gemini' ? 'Gemini' : 'OpenAI'} />
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain" onScroll={handleScroll} ref={messageContainerRef}>
-          {isLoading ? <MessageSkeleton /> : messages.length ? <div className="mx-auto flex w-full max-w-3xl flex-col gap-gutter px-gutter py-layout">{messages.map((message) => {
+          {isLoading ? <MessageSkeleton /> : messages.length ? <div className="mx-auto flex w-full max-w-4xl flex-col gap-gutter px-gutter py-layout">{messages.map((message) => {
             if (message.role === 'user') return <UserMessage key={message.id} message={message} />;
             if (message.role === 'system') return <SystemMessage key={message.id} message={message} />;
             if (message.isStreaming && !message.content) return null;

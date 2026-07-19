@@ -14,7 +14,7 @@ const STORAGE_DIRECTORY = path.resolve(env.documentStorageDir);
 await fs.mkdir(STORAGE_DIRECTORY, { recursive: true });
 
 export const saveEncryptedDocument = async (fileBuffer) => {
-  const encryptedBuffer = encryptBuffer(fileBuffer);
+  const encryptedBuffer = encryptBuffer(fileBuffer, 'document.file');
 
   const fileName = `${crypto.randomUUID()}.lifeos`;
 
@@ -31,7 +31,7 @@ export const saveEncryptedDocument = async (fileBuffer) => {
 export const readEncryptedDocument = async (storagePath) => {
   const encryptedBuffer = await fs.readFile(storagePath);
 
-  return decryptBuffer(encryptedBuffer);
+  return decryptBuffer(encryptedBuffer, 'document.file');
 };
 
 export const deleteEncryptedDocument = async (storagePath) => {

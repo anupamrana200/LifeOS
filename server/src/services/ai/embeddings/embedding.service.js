@@ -12,6 +12,7 @@ import {
 import {
   getEmbeddingProvider,
 } from './provider.factory.js';
+import { encryptText } from '../../encryption.service.js';
 
 class EmbeddingService {
   async indexDocument({
@@ -69,7 +70,7 @@ class EmbeddingService {
         documentId,
         userId,
         chunkIndex: index,
-        content: chunk.content,
+        content: encryptText(chunk.content, 'vector.chunk'),
       },
     }));
 

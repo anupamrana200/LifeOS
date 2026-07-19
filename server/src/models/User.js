@@ -10,16 +10,18 @@ const userSchema = new Schema(
       required: [true, 'Full name is required.'],
       trim: true,
       minlength: [2, 'Full name must be at least 2 characters long.'],
-      maxlength: [100, 'Full name cannot exceed 100 characters.'],
+      maxlength: [512, 'Full name cannot exceed 100 characters.'],
     },
     email: {
       type: String,
       required: [true, 'Email is required.'],
+      maxlength: [1024, 'Email cannot exceed 254 characters.'],
+    },
+    emailHash: {
+      type: String,
       unique: true,
-      lowercase: true,
-      trim: true,
-      maxlength: [254, 'Email cannot exceed 254 characters.'],
-      match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email address.'],
+      sparse: true,
+      index: true,
     },
     password: {
       type: String,
@@ -55,6 +57,7 @@ const userSchema = new Schema(
     toJSON: {
       transform: (_document, returnedObject) => {
         delete returnedObject.password;
+        delete returnedObject.emailHash;
         delete returnedObject.__v;
         return returnedObject;
       },

@@ -8,6 +8,8 @@ import ragService from '../ai/rag.service.js';
 import historyService from './history.service.js';
 
 import titleService from './title.service.js';
+import { decryptText, encryptText } from '../encryption.service.js';
+import { toMessageResponse } from '../../serializers/chat.serializer.js';
 
 class MessageService {
 
@@ -26,6 +28,8 @@ class MessageService {
       throw new Error('Chat not found.');
     }
 
+    if (!chat.model) chat.model = chat.provider === 'gemini' ? 'gemini-2.5-flash' : 'gpt-5-mini';
+
     if (chat.isLocked) {
       throw new Error(
         'This chat has been locked.'
@@ -35,7 +39,7 @@ class MessageService {
     await Message.create({
       chat: chat._id,
       role: 'user',
-      content: message,
+      content: encryptText(message, 'chat.message'),
     });
 
     const history = await historyService.getHistory(
@@ -56,7 +60,7 @@ class MessageService {
     await Message.create({
       chat: chat._id,
       role: 'assistant',
-      content: aiResponse.answer,
+      content: encryptText(aiResponse.answer, 'chat.message'),
       usage: aiResponse.usage,
       provider: aiResponse.provider,
       model: aiResponse.model,
@@ -64,13 +68,13 @@ class MessageService {
     });
 
     if (
-      chat.title === 'New Chat'
+      decryptText(chat.title, 'chat.title') === 'New Chat'
     ) {
       chat.title =
-        await titleService.generate({
+        encryptText(await titleService.generate({
           message,
           provider: chat.provider,
-        });
+        }), 'chat.title');
     }
 
     chat.userMessageCount += 1;
@@ -103,13 +107,16 @@ class MessageService {
       throw new Error('Chat not found.');
     }
 
-    return Message.find({
+    if (!chat.model) chat.model = chat.provider === 'gemini' ? 'gemini-2.5-flash' : 'gpt-5-mini';
+
+    const messages = await Message.find({
       chat: chatId,
     })
       .sort({
         createdAt: 1,
       })
       .lean();
+    return messages.map(toMessageResponse);
 
   }
 
@@ -130,6 +137,8 @@ async stream({
       throw new Error('Chat not found.');
     }
 
+    if (!chat.model) chat.model = chat.provider === 'gemini' ? 'gemini-2.5-flash' : 'gpt-5-mini';
+
     if (chat.isLocked) {
       throw new Error(
         'This chat has reached its message limit.'
@@ -139,7 +148,7 @@ async stream({
     await Message.create({
       chat: chat._id,
       role: 'user',
-      content: message,
+      content: encryptText(message, 'chat.message'),
     });
 
     const history =
@@ -159,7 +168,7 @@ async stream({
     await Message.create({
       chat: chat._id,
       role: 'assistant',
-      content: aiResponse.answer,
+      content: encryptText(aiResponse.answer, 'chat.message'),
       usage: aiResponse.usage,
       provider: aiResponse.provider,
       model: aiResponse.model,
@@ -167,14 +176,14 @@ async stream({
     });
 
     if (
-      chat.title === 'New Chat'
+      decryptText(chat.title, 'chat.title') === 'New Chat'
     ) {
 
       chat.title =
-        await titleService.generate({
+        encryptText(await titleService.generate({
           message,
           provider: chat.provider,
-        });
+        }), 'chat.title');
 
     }
 

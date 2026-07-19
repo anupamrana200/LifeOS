@@ -1,4 +1,5 @@
 import Message from '../../models/message.model.js';
+import { toMessageResponse } from '../../serializers/chat.serializer.js';
 
 class HistoryService {
   async getHistory(chatId, limit = 10) {
@@ -11,7 +12,7 @@ class HistoryService {
       .limit(limit)
       .lean();
 
-    return messages.reverse();
+    return messages.reverse().map(toMessageResponse);
   }
 }
 
