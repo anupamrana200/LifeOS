@@ -14,6 +14,7 @@ import chatRoutes from './routes/chat.routes.js';
 import documentRoutes from './routes/document.routes.js';
 
 import aiRoutes from './routes/ai.route.js';
+import dashboardRoutes from './routes/dashboard.routes.js';
 
 const app = express();
 
@@ -56,6 +57,7 @@ app.use('/api/v1/documents', documentRoutes);
 app.use('/api/v1/chats', chatRoutes);
 
 app.use('/api/v1/ai', aiRoutes);
+app.use('/api/v1/dashboard', dashboardRoutes);
 
 /*
 |--------------------------------------------------------------------------

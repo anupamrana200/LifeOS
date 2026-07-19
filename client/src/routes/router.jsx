@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AuthLayout, ChatLayout, DashboardLayout, LandingLayout, SettingsLayout } from '@/layouts';
 import { DashboardHomePage } from '@/pages/dashboard';
 import { DocumentsPage } from '@/pages/documents';
@@ -25,7 +25,7 @@ import { PublicRoute } from './PublicRoute';
 import { RouteSlot } from './RouteSlot';
 import { guestRoutes, protectedRoutes, publicRoutes } from './routeConfig';
 
-const toSlots = (routes) => routes.map((route) => ({ ...route, element: <RouteSlot /> }));
+const toSlots = (routes) => routes.map((route) => ({ ...route, element: route.element || <RouteSlot /> }));
 const dashboardPages = protectedRoutes.dashboard.map((route) => ({
   ...route,
   element: route.path === ROUTES.dashboard ? <DashboardHomePage /> : route.path === ROUTES.documents ? <DocumentProvider><DocumentsPage /></DocumentProvider> : route.path === ROUTES.profile ? <ProfilePage /> : route.path === ROUTES.search ? <SearchPage /> : <RouteSlot />,
@@ -46,7 +46,7 @@ const authPages = guestRoutes.map(({ key, path }) => ({ element: authPageElement
 export const router = createBrowserRouter([
   {
     element: <PublicRoute />,
-    children: [{ element: <LandingLayout />, children: toSlots(publicRoutes) }],
+    children: [{ element: <LandingLayout />, children: toSlots(publicRoutes.map((route) => ({ ...route, element: <Navigate replace to={ROUTES.dashboard} /> }))) }],
   },
   {
     element: <GuestRoute />,

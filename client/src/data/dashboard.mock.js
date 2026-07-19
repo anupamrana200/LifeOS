@@ -6,7 +6,7 @@ export const quickActions = Object.freeze([
   { description: 'Add a source to your personal knowledge base.', icon: Upload, title: 'Upload document', to: ROUTES.documents },
   { description: 'Find answers across your connected knowledge.', icon: FileSearch, title: 'Search knowledge', to: ROUTES.search },
   { description: 'Browse and organize your saved sources.', icon: FolderOpen, title: 'View documents', to: ROUTES.documents },
-  { description: 'Choose how LifeOS works for you.', icon: Settings, title: 'AI settings', to: ROUTES.settings },
+  { description: 'Choose how LifeOS works for you.', icon: Settings, title: 'AI settings', to: `${ROUTES.settings}?section=AI` },
   { description: 'Manage your personal LifeOS profile.', icon: UserRound, title: 'Profile', to: ROUTES.profile },
 ]);
 

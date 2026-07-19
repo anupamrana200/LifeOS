@@ -11,6 +11,7 @@ export const normalizeConversation = (conversation) => ({
   id: getChatId(conversation),
   isLocked: Boolean(conversation.isLocked),
   provider: conversation.provider === 'gemini' ? 'Gemini' : 'OpenAI',
+  model: conversation.model,
   title: conversation.title || 'New Chat',
   updatedAt: formatChatTimestamp(conversation.updatedAt || conversation.lastMessageAt || conversation.createdAt),
 });

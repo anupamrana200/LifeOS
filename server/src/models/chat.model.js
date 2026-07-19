@@ -22,6 +22,12 @@ const chatSchema = new mongoose.Schema(
       required: true,
     },
 
+    model: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
     userMessageCount: {
       type: Number,
       default: 0,

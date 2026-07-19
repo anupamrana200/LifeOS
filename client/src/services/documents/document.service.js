@@ -16,3 +16,10 @@ export const uploadDocument = async ({ file, metadata, onProgress, signal }) => 
 export const updateDocument = async (documentId, payload) => unwrap(await httpClient.patch(`/documents/${documentId}`, payload));
 export const deleteDocument = async (documentId) => unwrap(await httpClient.delete(`/documents/${documentId}`));
 export const downloadDocument = async (documentId) => httpClient.get(`/documents/${documentId}/download`, { responseType: 'blob' });
+export const previewDocument = async (documentId) => httpClient.get(`/documents/${documentId}/preview`, { responseType: 'blob' });
+export const processDocument = async (documentId) => unwrap(await httpClient.post(`/ai/documents/${documentId}/process`, {
+  documentType: 'generic',
+  model: 'gpt-5-mini',
+  modelProvider: 'openai',
+  task: 'summary',
+}));

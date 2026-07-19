@@ -23,7 +23,7 @@ export const MessageBubble = ({ message }) => {
       {!isUser && <span className="flex size-8 shrink-0 items-center justify-center rounded-pill bg-primary text-content-inverse"><Avatar aria-hidden="true" size={16} /></span>}
       <div className={`max-w-[85%] ${isUser ? 'order-first' : ''}`}>
         <div className={`rounded-panel px-4 py-3 text-sm leading-6 ${isUser ? 'bg-primary text-content-inverse' : 'border border-border bg-card text-content-primary'}`}>
-          <div data-markdown-ready="true" className="whitespace-pre-wrap">{message.content}</div>
+          <div data-markdown-ready="true" className="whitespace-pre-wrap">{message.content}{message.isStreaming && <span aria-label="Generating response" className="ml-1 inline-block h-4 w-1 animate-pulse rounded-pill bg-primary align-middle" />}</div>
           {message.code && <CodeBlock content={message.code.content} language={message.code.language} />}
           {message.sources?.length > 0 && <div className="mt-3 border-t border-border pt-3"><p className="text-xs font-medium text-content-secondary">Sources</p><ul className="mt-2 space-y-1">{message.sources.map((source, index) => <li className="text-xs text-content-muted" key={source.documentId || index}>Document {source.documentId || index + 1}{source.score ? ` · relevance ${Math.round(source.score * 100)}%` : ''}</li>)}</ul></div>}
         </div>

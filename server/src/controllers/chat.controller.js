@@ -10,7 +10,7 @@ import { chatService, messageService } from '../services/chat/index.js';
 
 export const createChatController = asyncHandler(
   async (req, res) => {
-    const { provider = 'openai' } = req.body;
+    const { provider = 'openai', model } = req.body;
 
     const allowedProviders = [
       'openai',
@@ -24,8 +24,19 @@ export const createChatController = asyncHandler(
       });
     }
 
+    const allowedModels = {
+      gemini: ['gemini-2.5-flash'],
+      openai: ['gpt-5-mini'],
+    };
+    const selectedModel = model || (provider === 'gemini' ? 'gemini-2.5-flash' : 'gpt-5-mini');
+
+    if (!allowedModels[provider].includes(selectedModel)) {
+      return res.status(400).json({ success: false, message: 'Invalid model for the selected provider.' });
+    }
+
     const chat = await chatService.create({
       owner: req.user.id,
+      model: selectedModel,
       provider,
     });
 

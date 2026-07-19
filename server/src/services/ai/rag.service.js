@@ -10,6 +10,7 @@ class RagService {
     userId,
     question,
     provider,
+    model,
     history = [],
   }) {
     const contexts = await retrievalService.retrieve({
@@ -36,6 +37,7 @@ class RagService {
 
     const response = await generationService.generate({
       provider,
+      model,
       messages: [
         {
           role: 'system',
@@ -64,6 +66,7 @@ class RagService {
     userId,
     question,
     provider,
+    model,
     history = [],
     onToken,
   }) {
@@ -109,6 +112,7 @@ class RagService {
     const response =
       await generationService.generateStream({
         provider,
+        model,
         messages: [
           {
             role: 'system',

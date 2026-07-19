@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { chatService, conversationService, sseService } from '@/services';
+import { useSettings } from '@/hooks';
 import { getFriendlyChatError, normalizeConversation, normalizeMessage } from '@/utils';
 import ChatContext from './ChatContext';
 
@@ -11,6 +12,7 @@ const createMessage = (content, role) => ({
 });
 
 export const ChatProvider = ({ children }) => {
+  const { settings } = useSettings();
   const [conversations, setConversations] = useState([]);
   const [selectedConversationId, setSelectedConversationId] = useState(null);
   const [messagesByConversation, setMessagesByConversation] = useState({});
@@ -81,7 +83,7 @@ export const ChatProvider = ({ children }) => {
   const createNewConversation = useCallback(async () => {
     setError(null);
     try {
-      const data = await conversationService.createConversation();
+      const data = await conversationService.createConversation(settings.ai.provider, settings.ai.model);
       const conversation = normalizeConversation(data);
       setConversations((current) => [conversation, ...current]);
       setMessagesByConversation((current) => ({ ...current, [conversation.id]: [] }));
@@ -92,7 +94,7 @@ export const ChatProvider = ({ children }) => {
       setError(getFriendlyChatError(createError));
       throw createError;
     }
-  }, []);
+  }, [settings.ai.model, settings.ai.provider]);
 
   const stopStreaming = useCallback(() => {
     streamController.current?.abort();

@@ -49,6 +49,7 @@ class MessageService {
         userId,
         question: message,
         provider: chat.provider,
+        model: chat.model,
         history,
     });
 
@@ -150,6 +151,7 @@ async stream({
         userId,
         question: message,
         provider: chat.provider,
+        model: chat.model,
         history,
         onToken,
       });

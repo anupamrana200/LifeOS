@@ -3,10 +3,12 @@ import Chat from '../../models/chat.model.js';
 class ChatService {
   async create({
     owner,
+    model,
     provider,
   }) {
     return Chat.create({
       owner,
+      model,
       provider,
     });
   }

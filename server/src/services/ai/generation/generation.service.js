@@ -5,6 +5,7 @@ class GenerationService {
 
   async generate({
     provider,
+    model,
     messages,
   }) {
 
@@ -14,12 +15,14 @@ class GenerationService {
 
     return aiProvider.generate({
       messages,
+      model,
     });
 
   }
 
   async generateStream({
     provider,
+    model,
     messages,
     onToken,
   }) {
@@ -30,6 +33,7 @@ class GenerationService {
 
     return aiProvider.generateStream({
       messages,
+      model,
       onToken,
     });
 

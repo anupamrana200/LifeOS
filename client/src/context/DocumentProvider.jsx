@@ -4,6 +4,7 @@ import { getFriendlyDocumentError } from '@/utils';
 import DocumentContext from './DocumentContext';
 
 const defaultFilters = { category: '', date: '', status: '' };
+const getDocumentId = (document) => document?.id || document?._id;
 
 export const DocumentProvider = ({ children }) => {
   const [documents, setDocuments] = useState([]);
@@ -42,18 +43,27 @@ export const DocumentProvider = ({ children }) => {
   const uploadFiles = useCallback(async (files, metadata) => {
     const queued = files.map((file) => ({ file, id: `${file.name}-${file.lastModified}-${Math.random()}`, metadata: { ...metadata, title: files.length === 1 && metadata.title ? metadata.title : file.name.replace(/\.[^.]+$/, '') }, progress: 0, status: 'uploading' }));
     setUploadQueue((current) => [...current, ...queued]);
-    await Promise.all(queued.map(async (item) => {
+    const results = await Promise.all(queued.map(async (item) => {
       const controller = new AbortController();
       controllers.current.set(item.id, controller);
       try {
         const data = await documentService.uploadDocument({ file: item.file, metadata: item.metadata, onProgress: (progress) => setUploadQueue((current) => current.map((queueItem) => queueItem.id === item.id ? { ...queueItem, progress } : queueItem)), signal: controller.signal });
-        setUploadQueue((current) => current.map((queueItem) => queueItem.id === item.id ? { ...queueItem, document: data?.document, progress: 100, status: 'completed' } : queueItem));
+        const uploadedDocument = data?.document;
+        const documentId = getDocumentId(uploadedDocument);
+        setUploadQueue((current) => current.map((queueItem) => queueItem.id === item.id ? { ...queueItem, document: uploadedDocument, progress: 100, status: documentId ? 'indexing' : 'completed' } : queueItem));
+        if (documentId) {
+          documentService.processDocument(documentId)
+            .catch(() => setUploadQueue((current) => current.map((queueItem) => queueItem.id === item.id ? { ...queueItem, status: 'indexing failed' } : queueItem)));
+        }
+        return true;
       } catch (uploadError) {
         const status = uploadError.name === 'CanceledError' || uploadError.name === 'AbortError' ? 'cancelled' : 'failed';
         setUploadQueue((current) => current.map((queueItem) => queueItem.id === item.id ? { ...queueItem, error: status === 'failed' ? getFriendlyDocumentError(uploadError) : null, status } : queueItem));
+        return false;
       } finally { controllers.current.delete(item.id); }
     }));
     await fetchPage({ page: 1 });
+    return { failed: results.filter((result) => !result).length, successful: results.filter(Boolean).length };
   }, [fetchPage]);
 
   const cancelUpload = useCallback((queueId) => controllers.current.get(queueId)?.abort(), []);
@@ -88,12 +98,35 @@ export const DocumentProvider = ({ children }) => {
       const anchor = window.document.createElement('a');
       anchor.href = url;
       anchor.download = documentItem.originalFileName || documentItem.title;
+      window.document.body.appendChild(anchor);
       anchor.click();
-      URL.revokeObjectURL(url);
+      anchor.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 0);
     } catch (downloadError) { setError(getFriendlyDocumentError(downloadError)); }
   }, []);
 
+  const previewDocument = useCallback(async (documentItem) => {
+    try {
+      return await documentService.previewDocument(documentItem.id);
+    } catch (previewError) {
+      setError(getFriendlyDocumentError(previewError));
+      return null;
+    }
+  }, []);
+
+  const reindexDocument = useCallback(async (documentId) => {
+    try {
+      await documentService.processDocument(documentId);
+      setDocuments((current) => current.map((documentItem) => documentItem.id === documentId ? { ...documentItem, aiStatus: 'processing' } : documentItem));
+      window.setTimeout(refresh, 1000);
+      return true;
+    } catch (processError) {
+      setError(getFriendlyDocumentError(processError));
+      return false;
+    }
+  }, [refresh]);
+
   const filteredDocuments = useMemo(() => documents.filter((documentItem) => (!filters.status || documentItem.aiStatus === filters.status) && (!filters.date || new Date(documentItem.createdAt).toISOString().slice(0, 10) === filters.date)), [documents, filters.date, filters.status]);
-  const value = useMemo(() => ({ cancelUpload, deleteDocument, documents: filteredDocuments, downloadDocument, error, filters, isLoading, pagination, refresh, removeQueueItem, renameDocument, retryUpload, search, selectedDocument, setFilters, setPage, setSearch, setSelectedDocument, setSort, setView, sort, uploadFiles, uploadQueue, view }), [cancelUpload, deleteDocument, downloadDocument, error, filteredDocuments, filters, isLoading, pagination, refresh, removeQueueItem, renameDocument, retryUpload, search, selectedDocument, setPage, sort, uploadFiles, uploadQueue, view]);
+  const value = useMemo(() => ({ cancelUpload, deleteDocument, documents: filteredDocuments, downloadDocument, error, filters, isLoading, pagination, previewDocument, refresh, reindexDocument, removeQueueItem, renameDocument, retryUpload, search, selectedDocument, setFilters, setPage, setSearch, setSelectedDocument, setSort, setView, sort, uploadFiles, uploadQueue, view }), [cancelUpload, deleteDocument, downloadDocument, error, filteredDocuments, filters, isLoading, pagination, previewDocument, refresh, reindexDocument, removeQueueItem, renameDocument, retryUpload, search, selectedDocument, setPage, sort, uploadFiles, uploadQueue, view]);
   return <DocumentContext.Provider value={value}>{children}</DocumentContext.Provider>;
 };
