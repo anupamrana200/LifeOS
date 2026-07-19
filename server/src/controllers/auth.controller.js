@@ -43,6 +43,7 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 export const refresh = asyncHandler(async (req, res) => {
+  console.log("Cookies:", req.cookies);
   const refreshToken = req.cookies?.refreshToken;
   const requestInfo = {
     ipAddress: req.ip,
