@@ -5,7 +5,7 @@ const REFRESH_TOKEN_COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
 const getAuthCookieOptions = (maxAge) => ({
   httpOnly: true,
-  secure: env.nodeEnv === 'production',
+  secure: false,
   sameSite: env.cookieSameSite,
   path: '/',
   maxAge,
