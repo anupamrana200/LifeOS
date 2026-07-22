@@ -153,7 +153,7 @@ LifeOS/
 │   │   ├── routes/
 │   │   ├── services/
 │   │   └── serializers/
-│   ├── scripts/            # Data-encryption migration scripts
+│   ├── scripts/            # Data-encryption  migration scripts
 │   └── src/uploads/encrypted/ # Default encrypted document storage
 └── README.md
 ```
